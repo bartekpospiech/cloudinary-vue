@@ -1,0 +1,47 @@
+button {
+  cursor: pointer;
+}
+
+.navbar {
+  margin-bottom: 2rem;
+}
+
+.router-link-exact-active {
+  font-weight: bold;
+}
+
+.top-hello {
+  padding: 3.5em 2rem;
+}
+
+.blog-head {
+  padding-bottom: 1.25rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+
+.blog-title {
+  font-size: 3rem;
+}
+
+.blog-description {
+  font-size: 1.1rem;
+  color: #999;
+}
+
+.blog-post {
+  margin-bottom: 3rem;
+}
+
+.sidebar-module-inset {
+  padding: 1rem;
+  background-color: #f5f5f5;
+}
+
+.cp {
+  cursor: pointer;
+}
+
+.cp.disabled {
+  cursor: default;
+}

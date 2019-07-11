@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Bartek Cloudinary app</title>
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="./css/app.css">
+</head>
+<body>
+	<div id="app">
+		<app-menu></app-menu>
+
+		<section class="mainBody">
+			<router-view></router-view>
+		</section>
+
+		<app-footer></app-footer>
+
+	</div>
+
+	<script type="text/x-template" id="app-menu">
+		<nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle nav">
+			    <span class="navbar-toggler-icon"></span>
+			  </button>
+			<router-link to="/logo" class="navbar-brand mb-0">
+				<strong>Bartek P.</strong>
+			</router-link>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<div class="navbar-nav">
+					<router-link :to="{ name: 'home'}" class="nav-item nav-link">Home</router-link>
+					<router-link to="/posts" class="nav-item nav-link">Posts</router-link>
+					<router-link to="/albums" class="nav-item nav-link">Albums</router-link>
+					<router-link to="/albums2" class="nav-item nav-link">Albums 2</router-link>
+				</div>
+			</div>
+		</nav>
+	</script>
+
+	<script type="text/x-template" id="home-tpl">
+		<div class="container">
+	      <div class="top-hello">
+	        <h1 class="text-center">Hello!</h1>
+	        <p class="lead text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sed tellus rhoncus, molestie tortor posuere, molestie ex. Suspendisse elit risus, tempus at sollicitudin nec, interdum id enim. Mauris quis velit mauris. Nunc in felis nec mi imperdiet viverra vitae sed risus. Donec aliquet quam odio, et euismod mi tincidunt nec. Sed euismod bibendum lacus ut feugiat. Pellentesque a justo scelerisque, gravida erat vitae, posuere ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed iaculis eget neque at luctus. Sed sed erat at lorem euismod semper. Vivamus pretium eleifend ipsum, in sodales orci sollicitudin eu.</p>
+	      </div>
+	    </div>
+	</script>
+
+	<script type="text/x-template" id="posts-tpl">
+		<div class="container mb-5">
+			<div class="blog-head">
+				<h1 class="blog-title">The Blog</h1>
+				<p class="lead blog-description">An example blog.</p>
+			</div>
+			<div class="row">
+				<div class="col-sm-8 blog-main">
+					<div v-for="post in posts" class="blog-post">
+						<h2 class="blog-post-title">{{post.title}}</h2>
+						<div class="blog-content">
+							<p>{{post.body}}</p>
+						</div>
+					</div>
+				</div>
+				<aside class="col-sm-3 ml-sm-auto blog-sidebar">
+					<div class="sidebar-module sidebar-module-inset">
+            			<h4>About</h4>
+            			<p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
+          			</div>
+				</aside>
+			</div>
+        	<button class="btn btn-success" v-on:click="fetchPlaceholderPosts">Get remote posts</button>
+	    </div>
+	</script>
+
+	<script type="text/x-template" id="albums-tpl">
+		<div class="container mb-5">
+			<div class="blog-head">
+				<h1 class="blog-title">Albums</h1>
+			</div>
+			<div class="row">
+				<div class="col-9">
+					<table class="table table-bordered table-hover mb-5">
+						<thead>
+				            <tr>
+				                <th>
+				                	<span>UserId</span>
+				                </th>
+				                <th>
+				                	<span>ID</span>
+				                </th>
+				                <th>
+				                	<span class="cp" v-on:click="reverseSort()">Name</span>
+				                	<i class="fa fa-sort" aria-hidden="true"></i>
+				                </th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr v-for="album in filteredAlbums">
+				                <td>{{album.userId}}</td>
+				                <td>{{album.id}}</td>
+				                <td>{{album.title}}</td>
+				            </tr>
+				        </tbody>
+			        </table>
+			    </div>
+
+			    <div class="col">
+			    	<h5 class="mb-3">Find album</h5>
+			    	<div class="form-group">
+			    		<input v-model="query" class="form-control mb-4" placeholder="Album title">
+			    	</div>
+
+					<h5 class="mb-3">Add new album</h5>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="UserId" v-model="newAlbum.userId" >
+					</div>
+					<div class="form-group">
+						<input type="name" class="form-control" placeholder="ID" v-model="newAlbum.id" >
+					</div>
+					<div class="form-group">
+						<input type="name" class="form-control" placeholder="Title" v-model="newAlbum.title" >
+					</div>
+					<button type="submit" class="btn btn-primary mb-3" v-on:click="addAlbum()">Add</button>
+				</div>
+			</div>
+	    </div>
+	</script>
+
+	<script type="text/x-template" id="albums2-tpl">
+		<div class="container mb-5">
+			<div class="blog-head">
+				<h1 class="blog-title">Albums 2</h1>
+			</div>
+			<div class="form-group">
+				<label for="perPage">Items per page</label>
+				<select class="form-control" id="perPage" v-model="pageItems" v-on:change="changeSelect()">
+					<option value="3">3</option>
+					<option value="6">6</option>
+					<option value="12">12</option>
+					<option value="24">24</option>
+					<option value="48">48</option>
+					<option value="96">96</option>
+			    </select>
+			</div>
+			<table class="table table-bordered table-hover mb-3">
+				<thead>
+		            <tr>
+		                <th>
+		                	<span>UserId</span>
+		                </th>
+		                <th>
+		                	<span>ID</span>
+		                </th>
+		                <th>
+		                	<span>Name</span>
+		                </th>
+		            </tr>
+		        </thead>
+		        <tbody>
+		            <tr v-for="album in filteredAlbums">
+		                <td>{{album.userId}}</td>
+		                <td>{{album.id}}</td>
+		                <td>{{album.title}}</td>
+		            </tr>
+		        </tbody>
+	        </table>
+
+	        <nav>
+	        	<ul class="pagination justify-content-center">
+	        		<li class="page-item cp" v-bind:class="{disabled: activePage == 1}">
+	        			<span class="page-link" v-on:click="previousPage">Previous</span>
+	        		</li>
+	        		<li v-for="page in allPages" class="page-item" v-bind:class="{active: activePage == page}">
+				      <span class="page-link cp" v-on:click="thisPage(page)">
+				      	{{page}}
+				      </span>
+				    </li>
+	        		<li class="page-item cp" v-bind:class="{disabled: allPages == 1}">
+	        			<span class="page-link" v-on:click="nextPage">Next</span>
+	        		</li>
+	        	</ul>
+	        </nav>
+	    </div>
+	</script>
+
+	<script type="text/x-template" id="app-footer">
+		<footer class="footer">
+	      <div class="container">
+	        
+	      </div>
+	    </footer>
+	</script>
+
+
+	<script src="https://unpkg.com/vue"></script>
+	<script src="https://unpkg.com/vue-router@latest/dist/vue-router.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-resource"></script>
+
+	<script src="https://use.fontawesome.com/ed37e62365.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="src/app.js"></script>
+</body>
+</body>
+</html>
